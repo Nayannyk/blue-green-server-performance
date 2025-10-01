@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  app_blue:
+    build: ./app
+    container_name: app_blue
+    environment:
+      - APP_VERSION=blue
+    ports:
+      - "5001:5000"
+
+  app_green:
+    build: ./app
+    container_name: app_green
+    environment:
+      - APP_VERSION=green
+    ports:
+      - "5002:5000"
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_proxy
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - app_blue
+      - app_green
+
